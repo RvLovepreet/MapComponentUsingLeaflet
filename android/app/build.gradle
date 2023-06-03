@@ -52,6 +52,7 @@ react {
     // hermesFlags = ["-O", "-output-source-map"]
 }
 
+
 /**
  * Set this to true to create four separate APKs instead of one,
  * one for each native architecture. This is useful if you don't
@@ -150,9 +151,13 @@ android {
 
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
+   
     implementation("com.facebook.react:react-android")
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
+    //new code
+   // implementation('com.reactnativecommunity.webview:react-native-webview:^12.2.0')
+    //new code
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
