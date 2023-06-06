@@ -1,17 +1,70 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { COMMON } from '../../theme';
-const CustomMapComponent = ({ width, height, locationInfo }) => {
+import CustomButton from '../CustomButtom/CustomButton';
+const CustomMapComponent = ({
+  width,
+  height,
+  locationInfo,
+  address,
+  setLocationInfo,
+  inputValue = '',
+  search,
+}) => {
+  const webRef = useRef();
+
+  function getInjectableJSMessage(message) {
+    return `
+      (function() {
+        window.postMessage(${JSON.stringify(message)}
+        )})
+      ();
+    `;
+  }
+
+  const sendData = addressInfo => {
+    console.log(locationInfo, 'updated statement');
+    console.log(addressInfo, 'updated statement  in object');
+    webRef.current?.injectJavaScript(
+      getInjectableJSMessage({
+        addressInfo,
+      }),
+    );
+    console.log('data sended : dsfa ok k k');
+  };
+
+  useEffect(() => {
+    if (inputValue) {
+      searchLocation();
+    }
+  }, [search]);
+  const searchLocation = () => {
+    console.log(locationInfo, 'location data', inputValue);
+    const obj = { ...locationInfo, address: inputValue };
+    setLocationInfo(pre => ({ ...pre, address: inputValue }));
+    sendData(obj);
+  };
+
   return (
     <View style={styles.mapContainer(width, height)}>
+      {/* <CustomButton title="Search" onPress={() => searchLocation()} /> */}
       <WebView
+        ref={webRef}
         source={{ uri: COMMON.webViewUrl.uri }}
         injectedJavaScript={`window.myValue = '${JSON.stringify(
           locationInfo,
         )}';`}
         onMessage={event => {}}
       />
+      {/*       <WebView
+        ref={webRef}
+        source={{ uri: COMMON.webViewUrl.uri }}
+        injectedJavaScript={`window.myValue = '${JSON.stringify(
+          locationInfo,
+        )}';`}
+        onMessage={event => {}}
+      /> */}
     </View>
   );
 };
