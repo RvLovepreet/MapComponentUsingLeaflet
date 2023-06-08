@@ -3,17 +3,20 @@ import { View, Text, StyleSheet, Button } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { COMMON } from '../../theme';
 import CustomButton from '../CustomButtom/CustomButton';
-const CustomMapComponent = ({
-  width,
-  height,
-  locationInfo,
-  address,
-  setLocationInfo,
-  inputValue = '',
-  search,
-  searchOption,
-  setInputValue,
-}) => {
+const CustomMapComponent = (
+  {
+    width,
+    height,
+    locationInfo,
+    address,
+    setLocationInfo,
+    inputValue = '',
+    search,
+    searchOption,
+    setInputValue,
+  },
+  webRef2,
+) => {
   const webRef = useRef();
 
   function getInjectableJSMessage(message) {
@@ -53,19 +56,20 @@ const CustomMapComponent = ({
       {/* <CustomButton title="Search" onPress={() => searchLocation()} /> */}
 
       <WebView
+        useWebView2={true}
         ref={webRef}
         source={{ uri: COMMON.webViewUrl.uri }}
         injectedJavaScript={`window.myValue = '${JSON.stringify(
           locationInfo,
         )}';`}
-        onMessage={event => {
+        onMessage={async event => {
           console.log(event, 'data');
           setLocationInfo(pre => ({
             ...pre,
             address: event.nativeEvent.data,
           }));
           setInputValue(event.nativeEvent.data);
-          console.log(locationInfo, 'loaction info');
+          console.log(locationInfo, 'location info');
         }}
       />
     </View>

@@ -22,16 +22,7 @@ const Home = ({ navigation, route }) => {
     address: address,
     searchOption: searchOption,
   });
-  const setOption1 = () => {
-    setsearchOption(true);
-    setsearch(!search);
-    setLocationInfo(pre => ({ ...pre, searchOption: true }));
-  };
-  const setOption2 = () => {
-    setsearchOption(false);
-    setsearch(!search);
-    setLocationInfo(pre => ({ ...pre, searchOption: false }));
-  };
+
   return (
     <View>
       <View style={[styles.SearchContainer, styles.searchOptionContainer]}>
