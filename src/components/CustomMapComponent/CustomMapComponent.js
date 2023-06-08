@@ -11,6 +11,8 @@ const CustomMapComponent = ({
   setLocationInfo,
   inputValue = '',
   search,
+  searchOption,
+  setInputValue,
 }) => {
   const webRef = useRef();
 
@@ -35,7 +37,7 @@ const CustomMapComponent = ({
   };
 
   useEffect(() => {
-    if (inputValue) {
+    if (inputValue || searchOption) {
       searchLocation();
     }
   }, [search]);
@@ -49,22 +51,23 @@ const CustomMapComponent = ({
   return (
     <View style={styles.mapContainer(width, height)}>
       {/* <CustomButton title="Search" onPress={() => searchLocation()} /> */}
+
       <WebView
         ref={webRef}
         source={{ uri: COMMON.webViewUrl.uri }}
         injectedJavaScript={`window.myValue = '${JSON.stringify(
           locationInfo,
         )}';`}
-        onMessage={event => {}}
+        onMessage={event => {
+          console.log(event, 'data');
+          setLocationInfo(pre => ({
+            ...pre,
+            address: event.nativeEvent.data,
+          }));
+          setInputValue(event.nativeEvent.data);
+          console.log(locationInfo, 'loaction info');
+        }}
       />
-      {/*       <WebView
-        ref={webRef}
-        source={{ uri: COMMON.webViewUrl.uri }}
-        injectedJavaScript={`window.myValue = '${JSON.stringify(
-          locationInfo,
-        )}';`}
-        onMessage={event => {}}
-      /> */}
     </View>
   );
 };
